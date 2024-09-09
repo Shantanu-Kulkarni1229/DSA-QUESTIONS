@@ -1,4 +1,15 @@
+https://www.geeksforgeeks.org/problems/count-digits5716/0
+Count Digits
+
+
+Given a number n. Count the number of digits in n which evenly divide n. Return an integer, total number of digits of n which divides n evenly.
+
+Note :- Evenly divides means whether n is divisible by a digit i.e. leaves a remainder 0 when divided.
+
+
+
 //{ Driver Code Starts
+
 #include<bits/stdc++.h> 
 using namespace std;
 

@@ -365,3 +365,202 @@ int* dynArr = new int[10];
 
 ---
 
+
+
+# 📌 Double Pointers & Multi-Level Pointers in C++
+
+## 🏗️ **1. Double Pointers (Pointer to Pointer)**
+A double pointer stores the address of another pointer.
+
+### 🔹 Syntax
+```cpp
+int value = 10;
+int* ptr = &value;    // Single pointer
+int** dblPtr = &ptr;  // Double pointer
+```
+
+### 🔹 Memory Visualization
+```
++----------+       +----------+       +-------+
+| dblPtr   | ---→  | ptr      | ---→  | value |
+| 0x2000   |       | 0x1000   |       | 10    |
++----------+       +----------+       +-------+
+```
+
+### 🔹 Accessing Values
+| Expression  | Result          | Description                  |
+|-------------|-----------------|------------------------------|
+| `dblPtr`    | `0x2000`        | Address of `ptr`             |
+| `*dblPtr`   | `0x1000`        | Value stored in `ptr` (address of `value`) |
+| `**dblPtr`  | `10`            | Dereferenced twice to get `value` |
+
+### 🔹 Use Cases
+1. **Dynamic 2D Arrays**:
+   ```cpp
+   int** matrix = new int*[3];
+   for (int i = 0; i < 3; i++) {
+       matrix[i] = new int[4]; // Each row points to a 1D array
+   }
+   ```
+2. **Modifying Pointers in Functions**:
+   ```cpp
+   void allocate(int** ptr) {
+       *ptr = new int(100); // Modifies the original pointer
+   }
+   ```
+
+---
+
+## 🏢 **2. Multi-Level Pointers**
+Pointers can chain to any level (e.g., `int***`, `int****`).
+
+### 🔹 Triple Pointer Example
+```cpp
+int x = 5;
+int* p1 = &x;
+int** p2 = &p1;
+int*** p3 = &p2;
+```
+
+### 🔹 Memory Diagram
+```
++------+       +------+       +------+       +-----+
+| p3   | ---→  | p2   | ---→  | p1   | ---→  | x   |
+| 0x3000|      | 0x2000|      | 0x1000|      | 5   |
++------+       +------+       +------+       +-----+
+```
+
+### 🔹 Dereferencing Levels
+| Expression | Result  | Description                  |
+|------------|---------|------------------------------|
+| `p3`       | `0x3000`| Address of `p2`              |
+| `*p3`      | `0x2000`| Value in `p2` (address of `p1`) |
+| `**p3`     | `0x1000`| Value in `p1` (address of `x`) |
+| `***p3`    | `5`     | Final value of `x`           |
+
+---
+
+## 📝 **Key Concepts Summary**
+1. **Double Pointers**:
+   - Used for 2D arrays or modifying pointers in functions.
+   - Syntax: `int** dblPtr = &ptr;`
+
+2. **Multi-Level Pointers**:
+   - Each `*` adds a level of indirection.
+   - Rarely go beyond triple pointers in practice.
+
+3. **Dereferencing Rules**:
+   - `*ptr` → Value at address.
+   - `**dblPtr` → Value after two hops.
+
+---
+
+## 📚 **MCQs for Practice**
+
+### 1. What is the output?
+```cpp
+int a = 10;
+int* p = &a;
+int** q = &p;
+cout << **q;
+```
+**Options**:  
+A) 10  
+B) Address of `a`  
+C) Address of `p`  
+D) Compile error  
+
+**Answer**: ✅ A) 10  
+
+---
+
+### 2. Which correctly declares a double pointer?
+**Options**:  
+A) `int* p;`  
+B) `int** p;`  
+C) `int& p;`  
+D) `int p*;`  
+
+**Answer**: ✅ B) `int** p;`  
+
+---
+
+### 3. What does this code do?
+```cpp
+int x = 5;
+int* ptr1 = &x;
+int** ptr2 = &ptr1;
+***ptr2 = 20;
+```
+**Options**:  
+A) Changes `x` to 20  
+B) Compile error (too many `*`)  
+C) Changes `ptr1`’s address  
+D) Runtime crash  
+
+**Answer**: ✅ B) Compile error (invalid dereference)  
+
+---
+
+### 4. How to access `x` using `p3`?
+```cpp
+int x = 100;
+int* p1 = &x;
+int** p2 = &p1;
+int*** p3 = &p2;
+```
+**Options**:  
+A) `*p3`  
+B) `**p3`  
+C) `***p3`  
+D) `****p3`  
+
+**Answer**: ✅ C) `***p3`  
+
+---
+
+## 🧩 **Diagram-Based Questions**
+
+### 1. Given:
+```
++------+       +------+       +-----+
+| p2   | ---→  | p1   | ---→  | x   |
+| 0x2000|      | 0x1000|      | 42  |
++------+       +------+       +-----+
+```
+What is `**p2`?  
+**Answer**: `42`  
+
+---
+
+## ⚠️ **Common Pitfalls**
+1. **Over-Dereferencing**:
+   ```cpp
+   int** p;
+   cout << ***p; // ❌ Undefined behavior!
+   ```
+2. **Uninitialized Pointers**:
+   ```cpp
+   int** p;
+   *p = new int; // ❌ Crash! 'p' has no address.
+   ```
+
+---
+
+## 🛠️ **Practical Example: Dynamic 2D Array**
+```cpp
+int rows = 3, cols = 4;
+int** grid = new int*[rows];
+for (int i = 0; i < rows; i++) {
+    grid[i] = new int[cols];
+}
+// Deallocation
+for (int i = 0; i < rows; i++) {
+    delete[] grid[i];
+}
+delete[] grid;
+```
+
+---
+
+❓ **Need further clarification?** Ask for more examples/diagrams!  

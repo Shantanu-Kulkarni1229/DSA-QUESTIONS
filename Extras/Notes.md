@@ -160,5 +160,184 @@ int* resizeArray(int* oldArr, int oldSize, int newSize) {
 
 ---
 
-❓ **Need clarification?** Ask for diagrams/code walkthroughs!  
+
+# 1. 📝 **Macros in C++**
+Preprocessor directives that perform text substitution before compilation.
+
+### 🔹 Syntax & Example
+```cpp
+#define PI 3.14          // Object-like macro
+#define SQUARE(x) (x*x)  // Function-like macro
+
+int main() {
+    cout << PI;          // Output: 3.14
+    cout << SQUARE(5);   // Output: 25 (replaced as (5*5))
+}
 ```
+
+### ⚠️ Pitfalls
+- No type checking
+- Hard to debug (preprocessor replaces text)
+```cpp
+#define DOUBLE(x) x+x
+cout << DOUBLE(1+2)*2; // Expands to 1+2+1+2*2 → Output: 7 (not 6)
+```
+
+---
+
+## 2. 🌍 **Global Variables**
+Variables declared outside all functions (accessible everywhere).
+
+### 🔹 Example
+```cpp
+#include <iostream>
+using namespace std;
+
+int globalVar = 42;  // Global variable
+
+void func() {
+    cout << globalVar;  // Accessible here
+}
+
+int main() {
+    globalVar += 10;
+    func();  // Output: 52
+}
+```
+
+### ⚠️ Drawbacks
+- **Unintended Modifications**: Any function can change them.
+- **Debugging Difficulty**: Hard to trace changes.
+
+### ✅ Best Practice
+- Use `static` to limit scope to file:
+```cpp
+static int fileScopedVar = 100;  // Only accessible in this .cpp file
+```
+
+---
+
+## 3. 🚀 **Inline Functions**
+Requests the compiler to expand the function code at call site (avoiding function call overhead).
+
+### 🔹 Syntax
+```cpp
+inline int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    cout << add(3, 4);  // Compiler may replace with cout << (3+4);
+}
+```
+
+### 🔍 Key Points
+- **Compiler Suggestion**: `inline` is a hint (compiler may ignore it).
+- **Best for Small Functions**: Avoid for complex logic.
+- **Header Files**: Define in headers (needed at call site).
+
+### ↔️ vs Macros
+| Feature        | Inline Function       | Macro                |
+|----------------|-----------------------|----------------------|
+| **Type Safety**| ✅ Yes                | ❌ No                |
+| **Debugging**  | ✅ Easier             | ❌ Hard (text substitution) |
+
+---
+
+## 4. ⚙️ **Default Arguments**
+Allows functions to be called with fewer arguments than parameters.
+
+### 🔹 Syntax
+```cpp
+void greet(string name, string prefix = "Mr.") {
+    cout << "Hello, " << prefix << " " << name << endl;
+}
+
+int main() {
+    greet("Alice");           // Output: Hello, Mr. Alice
+    greet("Bob", "Dr.");      // Output: Hello, Dr. Bob
+}
+```
+
+### 📜 Rules
+1. **Right-to-Left**: Defaults must start from the rightmost parameter.
+   ```cpp
+   // ✅ Valid
+   void func(int a, int b = 10, int c = 20);
+   
+   // ❌ Invalid
+   void func(int a = 5, int b, int c);
+   ```
+2. **Declaration Only**: Default args are typically specified in the function declaration (header file).
+
+---
+
+## 🧩 **Combined Example**
+```cpp
+#include <iostream>
+using namespace std;
+
+#define MAX(a,b) ((a) > (b) ? (a) : (b))  // Macro
+
+int globalCount = 0;  // Global variable
+
+inline void increment() { globalCount++; }  // Inline function
+
+void log(string msg, string level = "INFO") {  // Default arg
+    cout << "[" << level << "] " << msg << endl;
+}
+
+int main() {
+    cout << MAX(3, 5);  // Output: 5 (macro expansion)
+    
+    increment();        // Inline call
+    cout << globalCount; // Output: 1
+    
+    log("App started");           // Output: [INFO] App started
+    log("Error occurred", "ERR"); // Output: [ERR] Error occurred
+}
+```
+
+---
+
+## ⚠️ **Common Mistakes**
+1. **Macro Side Effects**:
+   ```cpp
+   #define SQUARE(x) x*x
+   cout << SQUARE(2+3); // Expands to 2+3*2+3 → Output: 11 (not 25)
+   ```
+2. **Global Variable Abuse**:
+   ```cpp
+   // Hard to track who modified this!
+   globalCount = 42;  
+   ```
+3. **Overusing Inline**:
+   ```cpp
+   inline void hugeFunc() { /* 100+ lines */ }  // ❌ Bloats binary
+   ```
+
+---
+
+## 📝 **Summary Table**
+| Concept            | Use Case                          | Pitfalls                     |
+|--------------------|-----------------------------------|------------------------------|
+| **Macros**         | Constants, quick code expansion  | No type safety, hard debugging |
+| **Global Vars**    | Shared access across functions   | Uncontrolled modifications    |
+| **Inline Funcs**   | Small, frequently used functions | Binary bloat if overused      |
+| **Default Args**   | Simplify function calls          | Must be right-to-left         |
+
+---
+
+❓ **Need clarification?** Ask for specific examples!  
+```
+
+---
+
+### Key Features:
+1. **Code Snippets**: Practical examples for each concept.
+2. **Comparison Tables**: Inline vs. macros, pros/cons.
+3. **Common Pitfalls**: Highlighted mistakes to avoid.
+4. **Combined Example**: Demonstrates all concepts in one program.
+5. **Structured Format**: Easy to navigate with headings and subheadings.
+
+Save this as `cpp_advanced_concepts.md` for quick reference! 🚀

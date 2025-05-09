@@ -21,7 +21,8 @@
     "regex": "cpp",
     "tuple": "cpp",
     "valarray": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "sjf": "c"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
